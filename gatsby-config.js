@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
   siteMetadata: {
     title: `Gatsby React Prismic Typescript`,
@@ -31,8 +33,16 @@ module.exports = {
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },
     },
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
+    {
+      resolve: 'gatsby-source-prismic',
+      options: {
+				repositoryName: process.env.GATSBY_PRISMIC_REPO_NAME,
+        accessToken: process.env.PRISMIC_ACCESS_TOKEN,
+        schemas: {
+          review: require('./src/schemas/review.json'),
+        }
+			}
+    },
     // `gatsby-plugin-offline`,
   ],
 }

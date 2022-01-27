@@ -1,0 +1,45 @@
+{
+  "Main": {
+    "uid": {
+      "type": "UID",
+      "config": {
+        "label": "id",
+        "placeholder": "Review ID"
+      }
+    },
+    "title": {
+      "type": "StructuredText",
+      "config": {
+        "single": "heading1",
+        "label": "title",
+        "placeholder": "Review Title"
+      }
+    },
+    "description": {
+      "type": "StructuredText",
+      "config": {
+        "single": "heading6",
+        "label": "description",
+        "placeholder": "Review Description"
+      }
+    },
+    "rating": {
+      "type": "Number",
+      "config": {
+        "label": "rating",
+        "placeholder": "Movie Rating"
+      }
+    },
+    "image": {
+      "type": "Image",
+      "config": {
+        "constraint": {
+          "width": 1500,
+          "height": 750
+        },
+        "thumbnails": [],
+        "label": "image"
+      }
+    }
+  }
+}

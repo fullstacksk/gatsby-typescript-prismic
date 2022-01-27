@@ -4,56 +4,50 @@ import Box from "@mui/material/Box"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import CardMedia from "@mui/material/CardMedia"
-import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious"
-import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import SkipNextIcon from "@mui/icons-material/SkipNext"
+import { Grid, Rating } from "@mui/material"
 
-const Review: React.FC = () => {
-  const theme = useTheme()
+const Review: React.FC = ({ review }: any) => {
+  console.log("review : ", review)
 
   return (
-    <Card sx={{ display: "flex" }}>
-      <Box sx={{ display: "flex", flexDirection: "row" }}>
-        <CardMedia
-          component="img"
-          sx={{ width: 151 }}
-          image="/static/6d91c86c0fde632ba4cd01062fd9ccfa/288e4/gatsby-astronaut.avif"
-          alt="Live from space album cover"
-        />
-        <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography component="div" variant="h5">
-            Live From Space
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
-            Mac Miller
-          </Typography>
-        </CardContent>
-        {/* <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
-          <IconButton aria-label="previous">
-            {theme.direction === "rtl" ? (
-              <SkipNextIcon />
-            ) : (
-              <SkipPreviousIcon />
-            )}
-          </IconButton>
-          <IconButton aria-label="play/pause">
-            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-          </IconButton>
-          <IconButton aria-label="next">
-            {theme.direction === "rtl" ? (
-              <SkipPreviousIcon />
-            ) : (
-              <SkipNextIcon />
-            )}
-          </IconButton>
-        </Box> */}
-      </Box>
+    <Card>
+      <Grid container>
+        <Grid
+          item
+          md={4}
+          sx={{ bgcolor: "#cfd8eb" }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CardMedia
+            component="img"
+            // image="/static/6d91c86c0fde632ba4cd01062fd9ccfa/288e4/gatsby-astronaut.avif"
+            image={review?.image?.url}
+            alt="Live from space album cover"
+          />
+        </Grid>
+        <Grid item md={8}>
+          <CardContent>
+            <Typography component="div" variant="h6">
+              {review?.title?.text}
+            </Typography>
+
+            <Rating
+              name="half-rating-read"
+              defaultValue={review?.rating}
+              precision={0.5}
+              readOnly
+            />
+            <Typography variant="body2" color="text.secondary" component="div">
+              {review?.description?.text}
+            </Typography>
+          </CardContent>
+        </Grid>
+      </Grid>
     </Card>
   )
 }
