@@ -11,8 +11,8 @@ import Avatar from "@mui/material/Avatar"
 import Button from "@mui/material/Button"
 import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
+import { Link } from "gatsby"
 
-const pages = ["Login", "Sign Up", "Home"]
 const settings = ["Logout"]
 
 const Navbar: React.FC = () => {
@@ -79,11 +79,23 @@ const Navbar: React.FC = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map(page => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/">
+                <Typography textAlign="center">Home</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={handleCloseNavMenu}
+                component={Link}
+                to="/login"
+              >
+                <Typography textAlign="center">Login</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={handleCloseNavMenu}
+                component={Link}
+                to="/register"
+              >
+                <Typography textAlign="center">Register</Typography>
+              </MenuItem>
             </Menu>
           </Box>
           <Typography
@@ -92,18 +104,33 @@ const Navbar: React.FC = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
           >
-            LOGO
+            Movie Review
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map(page => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            <Button
+              onClick={handleCloseNavMenu}
+              component={Link}
+              to="/"
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Home
+            </Button>
+            <Button
+              onClick={handleCloseNavMenu}
+              component={Link}
+              to="/login"
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Login
+            </Button>
+            <Button
+              onClick={handleCloseNavMenu}
+              component={Link}
+              to="/register"
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Sign Up
+            </Button>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">

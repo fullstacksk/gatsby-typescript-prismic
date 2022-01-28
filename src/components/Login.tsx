@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar"
 import Button from "@mui/material/Button"
 import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Checkbox from "@mui/material/Checkbox"
 import Grid from "@mui/material/Grid"
 import Box from "@mui/material/Box"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
@@ -12,6 +10,9 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { Link } from "gatsby"
+import * as yup from "yup"
+import { useForm } from "react-hook-form"
+import useYupValidationResolver from "../utils/useYupValidationResolver"
 
 const Copyright: React.FC = (props: any) => {
   return (
@@ -37,15 +38,26 @@ const Copyright: React.FC = (props: any) => {
 const theme = createTheme()
 
 const Login: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    })
-  }
+  //validation schema
+  const validationSchema = yup.object({
+    email: yup
+      .string()
+      .trim()
+      .required("Email is required")
+      .email("Invalid email"),
+    password: yup.string().trim().min(8),
+  })
+
+  //using custom hook
+  const resolver = useYupValidationResolver(validationSchema)
+
+  //calling useForm
+  const {
+    register,
+    handleSubmit,
+    formState: { isDirty, isValid, errors },
+  } = useForm({ resolver })
+  const onSubmit = () => {}
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,18 +80,22 @@ const Login: React.FC = () => {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
+                  autoFocus
                   required
                   fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  {...register("email")}
+                  error={!!errors.email}
+                  helperText={errors?.email?.message}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -91,6 +107,9 @@ const Login: React.FC = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  {...register("password")}
+                  error={!!errors.password}
+                  helperText={errors?.password?.message}
                 />
               </Grid>
             </Grid>
