@@ -5,3 +5,8 @@
  */
 
 // You can delete this file if you're not using it
+
+// import * as fireabse from 'firebase';
+import "firebase/auth"
+import "firebase/firestore"
+import "firebase/functions"

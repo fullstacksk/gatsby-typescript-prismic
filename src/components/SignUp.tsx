@@ -11,10 +11,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import * as yup from "yup"
 import { useForm } from "react-hook-form"
 import useYupValidationResolver from "../utils/useYupValidationResolver"
+import { AuthContext } from "../context/auth"
+import firebase from "gatsby-plugin-firebase"
 
 const Copyright: React.FC = (props: any) => {
   return (
@@ -40,6 +42,9 @@ const Copyright: React.FC = (props: any) => {
 const theme = createTheme()
 
 const SignUp: React.FC = () => {
+  const [error, setError] = React.useState()
+  const { setUser } = React.useContext(AuthContext)
+
   //validation schema
   const validationSchema = yup.object({
     name: yup.string().trim().required("Name is required"),
@@ -61,7 +66,29 @@ const SignUp: React.FC = () => {
     formState: { isDirty, isValid, errors },
   } = useForm({ resolver })
 
-  const onSubmit = () => {}
+  const onSubmit = async data => {
+    try {
+      //registering user
+      const user = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(data.email, data.password)
+      //storing user to database
+
+      await firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .set({
+          email: data.email,
+          name: data.name,
+        })
+      setUser(user)
+      navigate("/")
+    } catch (error) {
+      console.log(error)
+      setError(error.message)
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -100,6 +127,7 @@ const SignUp: React.FC = () => {
                   {...register("name")}
                   error={!!errors.name}
                   helperText={errors?.name?.message}
+                  onChange={() => setError()}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -113,6 +141,7 @@ const SignUp: React.FC = () => {
                   {...register("email")}
                   error={!!errors.email}
                   helperText={errors?.email?.message}
+                  onChange={() => setError()}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -127,9 +156,11 @@ const SignUp: React.FC = () => {
                   {...register("password")}
                   error={!!errors.password}
                   helperText={errors?.password?.message}
+                  onChange={() => setError()}
                 />
               </Grid>
             </Grid>
+            {!!error && <Typography color="error">{error}</Typography>}
             <Button
               type="submit"
               fullWidth
@@ -140,7 +171,7 @@ const SignUp: React.FC = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link to="/login">Already have an account? Sign in</Link>
+                <Link to="/">Already have an account? Sign in</Link>
               </Grid>
             </Grid>
           </Box>

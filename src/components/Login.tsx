@@ -13,6 +13,9 @@ import { Link } from "gatsby"
 import * as yup from "yup"
 import { useForm } from "react-hook-form"
 import useYupValidationResolver from "../utils/useYupValidationResolver"
+import { AuthContext } from "../context/auth"
+import firebase from "gatsby-plugin-firebase"
+import { navigate } from "gatsby"
 
 const Copyright: React.FC = (props: any) => {
   return (
@@ -38,6 +41,9 @@ const Copyright: React.FC = (props: any) => {
 const theme = createTheme()
 
 const Login: React.FC = () => {
+  const [error, setError] = React.useState()
+  const { setUser } = React.useContext(AuthContext)
+
   //validation schema
   const validationSchema = yup.object({
     email: yup
@@ -57,7 +63,18 @@ const Login: React.FC = () => {
     handleSubmit,
     formState: { isDirty, isValid, errors },
   } = useForm({ resolver })
-  const onSubmit = () => {}
+
+  const onSubmit = async data => {
+    try {
+      const user = await firebase
+        .auth()
+        .signInWithEmailAndPassword(data.email, data.password)
+      setUser(user)
+      navigate("/")
+    } catch (error) {
+      setError(error.message)
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -96,6 +113,7 @@ const Login: React.FC = () => {
                   {...register("email")}
                   error={!!errors.email}
                   helperText={errors?.email?.message}
+                  onChange={() => setError()}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -110,9 +128,11 @@ const Login: React.FC = () => {
                   {...register("password")}
                   error={!!errors.password}
                   helperText={errors?.password?.message}
+                  onChange={() => setError()}
                 />
               </Grid>
             </Grid>
+            {!!error && <Typography color="error">{error}</Typography>}
             <Button
               type="submit"
               fullWidth
