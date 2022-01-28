@@ -1,9 +1,10 @@
 import { Grid, Typography } from "@mui/material"
 import * as React from "react"
+import Layout from "../components/layout"
 import Seo from "../components/Seo"
 
 const NotFoundPage = () => (
-  <div>
+  <Layout>
     <Seo title="404: Not found" />
     <Grid container>
       <Grid
@@ -21,7 +22,7 @@ const NotFoundPage = () => (
         </Typography>
       </Grid>
     </Grid>
-  </div>
+  </Layout>
 )
 
 export default NotFoundPage

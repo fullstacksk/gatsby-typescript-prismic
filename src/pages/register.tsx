@@ -7,9 +7,11 @@ import { navigate } from "gatsby"
 
 const SignUpPage = () => {
   const { user } = React.useContext(AuthContext)
-  if (user) {
-    navigate("/")
-  }
+  React.useEffect(() => {
+    if (user) {
+      navigate("/")
+    }
+  }, [])
   return (
     <Layout>
       <Seo title="Register" />

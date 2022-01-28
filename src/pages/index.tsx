@@ -7,9 +7,11 @@ import { AuthContext } from "../context/auth"
 
 const IndexPage = ({ data }: any) => {
   const { user } = React.useContext(AuthContext)
-  if (!user) {
-    navigate("/login")
-  }
+  React.useEffect(() => {
+    if (!user) {
+      navigate("/login")
+    }
+  }, [])
 
   console.log(data.reviews.edges)
   return (
