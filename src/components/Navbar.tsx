@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem"
 import { Link, navigate } from "gatsby"
 import { AuthContext } from "../context/auth"
 import firebase from "gatsby-plugin-firebase"
+import avatarURL from "../images/avatar.png"
 
 const settings = ["Logout"]
 
@@ -24,12 +25,6 @@ const Navbar: React.FC = () => {
   )
 
   const { user } = React.useContext(AuthContext)
-  React.useEffect(() => {
-    if (user) {
-      navigate("/")
-    }
-  }, [user])
-  console.log("user in navbar", user)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -162,8 +157,16 @@ const Navbar: React.FC = () => {
           {!!user && (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <IconButton
+                  onClick={handleOpenUserMenu}
+                  style={{
+                    border: "1px solid red",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  sx={{ p: 0 }}
+                >
+                  <Avatar alt="Remy Sharp" src={avatarURL} variant="circular" />
                 </IconButton>
               </Tooltip>
               <Menu
